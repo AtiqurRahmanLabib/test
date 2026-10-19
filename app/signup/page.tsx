@@ -1,5 +1,6 @@
 
 "use client";
+
 import BazarHeader from "@/components/BazarHeader";
 import { useState } from "react";
 import Link from "next/link";
@@ -67,147 +68,163 @@ export default function SignupPage() {
     }
   }
 
+  const inputClass =
+    "w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-950 placeholder:text-gray-500 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100";
+
+  const labelClass =
+    "mb-1 block text-sm font-semibold text-gray-950";
+
   return (
     <>
-  <BazarHeader />
+      <BazarHeader />
 
-  <main className="min-h-screen bg-green-50 px-4 py-10">
-      <div className="mx-auto w-full max-w-md rounded-2xl border border-green-100 bg-white p-6 shadow-lg sm:p-8">
-        <Link
-          href="/"
-          className="text-sm font-medium text-green-700 hover:underline"
-        >
-          ← হোম পেজে ফিরে যান
-        </Link>
-
-        <div className="mt-6 text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            অ্যাকাউন্ট তৈরি করুন
-          </h1>
-          <p className="mt-2 text-sm text-gray-600">
-            বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।
-          </p>
-        </div>
-
-        <form onSubmit={handleSignup} className="mt-6 space-y-4">
-          <div>
-            <label htmlFor="name" className="mb-1 block text-sm font-medium text-gray-700">
-              নাম
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="আপনার নাম লিখুন"
-              autoComplete="name"
-              required
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
-              ইমেইল
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@example.com"
-              autoComplete="email"
-              required
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
-              পাসওয়ার্ড
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="কমপক্ষে ৮ অক্ষর"
-              autoComplete="new-password"
-              minLength={8}
-              required
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="confirmPassword" className="mb-1 block text-sm font-medium text-gray-700">
-              পাসওয়ার্ড নিশ্চিত করুন
-            </label>
-            <input
-              id="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="আবার পাসওয়ার্ড লিখুন"
-              autoComplete="new-password"
-              required
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
-            />
-          </div>
-
-          {message && (
-            <p
-              role="status"
-              className="rounded-lg bg-green-50 p-3 text-sm text-green-800"
-            >
-              {message}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-green-700 px-4 py-3 font-semibold text-white transition hover:bg-green-800 disabled:opacity-60"
-          >
-            {loading ? "অপেক্ষা করুন..." : "অ্যাকাউন্ট তৈরি করুন"}
-          </button>
-        </form>
-
-        <div className="my-5 flex items-center gap-3">
-          <div className="h-px flex-1 bg-gray-200" />
-          <span className="text-sm text-gray-500">অথবা</span>
-          <div className="h-px flex-1 bg-gray-200" />
-        </div>
-
-        <div className="space-y-3">
-          <button
-            type="button"
-            onClick={() => handleSocialLogin("google")}
-            className="w-full rounded-lg border border-gray-300 px-4 py-3 font-medium text-gray-700 transition hover:bg-gray-50"
-          >
-            Google দিয়ে চালিয়ে যান
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleSocialLogin("github")}
-            className="w-full rounded-lg border border-gray-300 px-4 py-3 font-medium text-gray-700 transition hover:bg-gray-50"
-          >
-            GitHub দিয়ে চালিয়ে যান
-          </button>
-        </div>
-
-        <p className="mt-6 text-center text-sm text-gray-600">
-          অ্যাকাউন্ট আছে?{" "}
+      <main className="min-h-screen bg-green-50 px-4 py-10">
+        <div className="mx-auto w-full max-w-md rounded-2xl border border-green-100 bg-white p-6 text-gray-950 shadow-lg sm:p-8">
           <Link
-            href="/signin"
-            className="font-semibold text-green-700 hover:underline"
+            href="/"
+            className="text-sm font-semibold text-green-800 hover:underline"
           >
-            সাইন ইন করুন
+            ← হোম পেজে ফিরে যান
           </Link>
-        </p>
-      </div>
-        </main>
-  </>
+
+          <div className="mt-6 text-center">
+            <h1 className="text-3xl font-bold text-gray-950">
+              অ্যাকাউন্ট তৈরি করুন
+            </h1>
+
+            <p className="mt-2 text-sm font-medium text-gray-800">
+              বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।
+            </p>
+          </div>
+
+          <form onSubmit={handleSignup} className="mt-6 space-y-4">
+            <div>
+              <label htmlFor="name" className={labelClass}>
+                নাম
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="আপনার নাম লিখুন"
+                autoComplete="name"
+                required
+                className={inputClass}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className={labelClass}>
+                ইমেইল
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@example.com"
+                autoComplete="email"
+                required
+                className={inputClass}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className={labelClass}>
+                পাসওয়ার্ড
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="কমপক্ষে ৮ অক্ষর"
+                autoComplete="new-password"
+                minLength={8}
+                required
+                className={inputClass}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className={labelClass}>
+                পাসওয়ার্ড নিশ্চিত করুন
+              </label>
+              <input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="আবার পাসওয়ার্ড লিখুন"
+                autoComplete="new-password"
+                required
+                className={inputClass}
+              />
+            </div>
+
+            {message && (
+              <p
+                role="status"
+                className="rounded-lg border border-green-200 bg-green-50 p-3 text-sm font-semibold text-green-950"
+              >
+                {message}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-lg bg-green-800 px-4 py-3 font-bold text-white transition hover:bg-green-900 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loading ? "অপেক্ষা করুন..." : "অ্যাকাউন্ট তৈরি করুন"}
+            </button>
+          </form>
+
+          <div className="my-5 flex items-center gap-3">
+            <div className="h-px flex-1 bg-gray-300" />
+            <span className="text-sm font-semibold text-gray-800">
+              অথবা
+            </span>
+            <div className="h-px flex-1 bg-gray-300" />
+          </div>
+
+          <div className="space-y-3">
+            <button
+              type="button"
+              onClick={() => handleSocialLogin("google")}
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-950 transition hover:bg-gray-100"
+            >
+              Google দিয়ে চালিয়ে যান
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSocialLogin("github")}
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-950 transition hover:bg-gray-100"
+            >
+              GitHub দিয়ে চালিয়ে যান
+            </button>
+          </div>
+
+          <div className="mt-6 text-center">
+  <span className="text-sm font-bold text-black">
+    অ্যাকাউন্ট আছে?{" "}
+  </span>
+
+  <Link
+  href="/signin"
+  style={{
+    color: "#000000",
+    fontWeight: 900,
+    textDecoration: "underline",
+  }}
+>
+  সাইন ইন করুন
+</Link>
+</div>
+        </div>
+      </main>
+    </>
   );
 }
