@@ -1,6 +1,8 @@
 
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { headers } from "next/headers";
+import { redirect, notFound } from "next/navigation";
+import { auth } from "@/lib/auth";
 
 type Market = {
   name?: string;
@@ -73,6 +75,16 @@ export default async function ProductDetailsPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  // Check whether the visitor is logged in
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  // Send logged-out visitors to the sign-in page
+  if (!session) {
+    redirect("/signin");
+  }
+
   const { slug } = await params;
   const product = await getProduct(slug);
 
@@ -131,7 +143,11 @@ export default async function ProductDetailsPage({
         <section className="rounded-2xl border border-green-100 bg-white p-5 shadow-sm sm:p-8">
           <div className="grid gap-7 md:grid-cols-2">
             <div className="flex min-h-64 items-center justify-center rounded-xl bg-green-50 p-8">
-              <span className="text-8xl" role="img" aria-label={product.nameBn}>
+              <span
+                className="text-8xl"
+                role="img"
+                aria-label={product.nameBn}
+              >
                 {product.image &&
                 !product.image.startsWith("http")
                   ? product.image
@@ -258,7 +274,9 @@ export default async function ProductDetailsPage({
                 <tbody>
                   {markets.map((market, index) => (
                     <tr
-                      key={`${market.name ?? market.marketName ?? "market"}-${index}`}
+                      key={`${
+                        market.name ?? market.marketName ?? "market"
+                      }-${index}`}
                       className="border-b border-gray-100"
                     >
                       <td className="p-3 font-medium text-gray-800">
