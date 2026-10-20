@@ -3,7 +3,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { Product, Category, formatPrice } from "@/lib/utils";
 
 const API = "https://api.api-store.workers.dev/api/bazardor";
@@ -63,6 +62,7 @@ function getEmoji(product: Product) {
 
 function ProductCard({ product }: { product: Product }) {
   const image = product.image;
+
   const hasImage =
     typeof image === "string" &&
     (image.startsWith("https://") ||
@@ -102,6 +102,7 @@ function ProductCard({ product }: { product: Product }) {
 
         <div className="mt-auto pt-3">
           <p className="text-xs text-gray-500">আজকের দাম</p>
+
           <p className="mt-1 text-base font-extrabold text-green-800">
             ৳{formatPrice(Number(product.today ?? 0))}
             <span className="ml-1 text-[10px] font-normal text-gray-500">
@@ -113,6 +114,7 @@ function ProductCard({ product }: { product: Product }) {
 
       <div className="mt-2 flex items-center justify-between gap-1 border-t border-gray-100 pt-2">
         <span className="text-xs text-gray-500">পরিবর্তন</span>
+
         <span
           className={`rounded-full px-2 py-1 text-[10px] font-bold ${
             direction === "up"
@@ -130,17 +132,37 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-export default function CategoryPage() {
-  const params = useParams<{ slug: string }>();
-  const slug = decodeURIComponent(params.slug);
-
+export default function CategoryPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const [slug, setSlug] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [sortBy, setSortBy] = useState("default");
 
+  // Dynamic route থেকে slug নেওয়া
   useEffect(() => {
+    let cancelled = false;
+
+    params.then(({ slug }) => {
+      if (!cancelled) {
+        setSlug(decodeURIComponent(slug));
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [params]);
+
+  // API থেকে পণ্য ও ক্যাটাগরি লোড
+  useEffect(() => {
+    if (!slug) return;
+
     let cancelled = false;
 
     async function loadData() {
@@ -149,7 +171,9 @@ export default function CategoryPage() {
 
       try {
         const [productResponse, categoryResponse] = await Promise.all([
-          fetch(`${API}/products?category=${encodeURIComponent(slug)}`),
+          fetch(
+            `${API}/products?category=${encodeURIComponent(slug)}`
+          ),
           fetch(`${API}/categories`),
         ]);
 
@@ -163,7 +187,9 @@ export default function CategoryPage() {
         let categoryList: Category[] = [];
 
         if (categoryResponse.ok) {
-          const categoryData: unknown = await categoryResponse.json();
+          const categoryData: unknown =
+            await categoryResponse.json();
+
           categoryList = getArray<Category>(categoryData);
         }
 
@@ -180,7 +206,9 @@ export default function CategoryPage() {
           );
         }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
@@ -203,7 +231,10 @@ export default function CategoryPage() {
           return Number(b.today ?? 0) - Number(a.today ?? 0);
 
         case "name":
-          return (a.nameBn ?? "").localeCompare(b.nameBn ?? "", "bn");
+          return (a.nameBn ?? "").localeCompare(
+            b.nameBn ?? "",
+            "bn"
+          );
 
         default:
           return 0;
@@ -255,6 +286,7 @@ export default function CategoryPage() {
 
           <label className="flex items-center gap-2 text-xs text-gray-600">
             সাজান:
+
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value)}
@@ -277,6 +309,7 @@ export default function CategoryPage() {
         {!loading && error && (
           <div className="rounded-xl border border-red-200 bg-white p-6 text-center">
             <p className="text-sm text-red-600">{error}</p>
+
             <button
               onClick={() => window.location.reload()}
               className="mt-3 rounded-lg bg-green-700 px-4 py-2 text-sm font-bold text-white"
@@ -289,9 +322,11 @@ export default function CategoryPage() {
         {!loading && !error && sortedProducts.length === 0 && (
           <div className="rounded-xl border border-gray-200 bg-white p-8 text-center">
             <p className="text-4xl">🛒</p>
+
             <p className="mt-3 font-semibold">
               এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি।
             </p>
+
             <Link
               href="/"
               className="mt-4 inline-block rounded-lg bg-green-700 px-4 py-2 text-sm font-bold text-white"
