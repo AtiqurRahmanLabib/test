@@ -1,3 +1,4 @@
+export const instant = false;
 import { Suspense } from "react";
 import Link from "next/link";
 import { headers } from "next/headers";
