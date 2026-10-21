@@ -1,4 +1,4 @@
-
+import { Suspense } from "react";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect, notFound } from "next/navigation";
@@ -70,7 +70,7 @@ function formatPrice(value?: number) {
   return `৳${Number(value).toLocaleString("en-BD")}`;
 }
 
-export default async function ProductDetailsPage({
+async function ProductDetailsContent({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -313,5 +313,22 @@ export default async function ProductDetailsPage({
         </div>
       </div>
     </main>
+  );
+}
+export default function ProductDetailsPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-green-50 p-8 text-center">
+          পণ্যের তথ্য লোড হচ্ছে...
+        </main>
+      }
+    >
+      <ProductDetailsContent params={params} />
+    </Suspense>
   );
 }
